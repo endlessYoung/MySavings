@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/StatsFragment"
+        android:icon="@drawable/ic_data"
+        android:title="数据" />
+
+    <item
+        android:id="@+id/HomeFragment"
+        android:icon="@drawable/ic_new_saving"
+        android:title="记一笔" />
+
+    <item
+        android:id="@+id/MineFragment"
+        android:icon="@drawable/ic_mine"
+        android:title="我的" />
+
+</menu>

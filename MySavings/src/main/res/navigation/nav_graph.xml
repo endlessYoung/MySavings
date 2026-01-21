@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/HomeFragment">
+
+    <fragment
+        android:id="@+id/HomeFragment"
+        android:name="com.endlessyoung.mysavings.ui.HomeFragment"
+        android:label="@string/home_fragment_label"
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_homeFragment_to_AddSavingDialogFragment"
+            app:destination="@id/AddSavingDialogFragment" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_SavingDetailFragment"
+            app:destination="@id/SavingDetailFragment" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/AddSavingDialogFragment"
+        android:name="com.endlessyoung.mysavings.ui.AddSavingDialogFragment"
+        android:label="@string/add_saving_fragment_label"
+        tools:layout="@layout/fragment_add_saving">
+
+        <action
+            android:id="@+id/action_AddSavingDialogFragment_to_homeFragment"
+            app:destination="@id/HomeFragment" />
+    </dialog>
+
+    <fragment
+        android:id="@+id/SavingDetailFragment"
+        android:name="com.endlessyoung.mysavings.ui.SavingDetailFragment"
+        android:label="@string/saving_detail_fragment_label"
+        tools:layout="@layout/fragment_saving_detail" />
+
+    <fragment
+        android:id="@+id/StatsFragment"
+        android:name="com.endlessyoung.mysavings.ui.StatsFragment"
+        android:label="统计"
+        tools:layout="@layout/fragment_stats">
+
+        <action
+            android:id="@+id/action_stats_to_recordList"
+            app:destination="@id/recordListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recordListFragment"
+        android:name="com.endlessyoung.mysavings.ui.RecordListFragment"
+        android:label="存款明细"
+        tools:layout="@layout/fragment_record_list">
+
+        <argument
+            android:name="year"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="month"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/MineFragment"
+        android:name="com.endlessyoung.mysavings.ui.MineFragment"
+        android:label="@string/mine_fragment_label"
+        tools:layout="@layout/fragment_stats"/>
+
+</navigation>
