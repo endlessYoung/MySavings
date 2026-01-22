@@ -19,8 +19,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.endlessyoung.mysavings.MoneyUtils
 import com.endlessyoung.mysavings.R
+import com.endlessyoung.mysavings.databinding.DialogActionMenuBinding
 import com.endlessyoung.mysavings.databinding.FragmentHomeBinding
 import com.endlessyoung.mysavings.log.MySavingsLog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -70,7 +72,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 binding.fab.setOnClickListener {
-                    findNavController().navigate(R.id.action_homeFragment_to_AddSavingDialogFragment)
+                    showActionMenu()
                 }
             }
         }
@@ -101,6 +103,35 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         attachSwipeToDelete()
     }
 
+    private fun showActionMenu() {
+        val bottomSheet = com.google.android.material.bottomsheet.BottomSheetDialog(
+            requireContext(),
+            R.style.BottomSheetDialogTheme
+        )
+        val dialogBinding = DialogActionMenuBinding.inflate(layoutInflater)
+        bottomSheet.setContentView(dialogBinding.root)
+
+        // 1. 新增储蓄
+        dialogBinding.btnNavAddSaving.setOnClickListener {
+            bottomSheet.dismiss()
+            findNavController().navigate(R.id.action_homeFragment_to_AddSavingDialogFragment)
+        }
+
+        // 2. 更新公积金
+        dialogBinding.btnNavUpdateFund.setOnClickListener {
+            bottomSheet.dismiss()
+             findNavController().navigate(R.id.action_homeFragment_to_AddFundDialogFragment)
+        }
+
+        // 3. 新增支出计划
+        dialogBinding.btnNavAddPlan.setOnClickListener {
+            bottomSheet.dismiss()
+             findNavController().navigate(R.id.action_homeFragment_to_AddPlanDialogFragment)
+        }
+
+        bottomSheet.show()
+    }
+
     private fun attachSwipeToDelete(){
         val deleteIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete)
         val background = Color.RED.toDrawable()
@@ -122,7 +153,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 val pos = viewHolder.adapterPosition
                 if (pos != RecyclerView.NO_POSITION) {
                     val item = adapter.currentList[pos]
-                    sharedVm.delete(item)
+                    sharedVm.deleteSaving(item)
 
                     Toast.makeText(requireContext(), "已删除 ${item.bankName}", Toast.LENGTH_SHORT).show()
                 }

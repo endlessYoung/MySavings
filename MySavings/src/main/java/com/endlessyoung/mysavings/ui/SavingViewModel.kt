@@ -4,16 +4,18 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.endlessyoung.mysavings.data.local.db.AppDatabase
-import com.endlessyoung.mysavings.data.local.entity.SavingEntity
+import com.endlessyoung.mysavings.data.local.entity.FundEntity
+import com.endlessyoung.mysavings.data.local.entity.PlanEntity
+import com.endlessyoung.mysavings.data.repository.FundRepository
+import com.endlessyoung.mysavings.data.repository.PlanRepository
 import com.endlessyoung.mysavings.data.repository.SavingRepository
 import com.endlessyoung.mysavings.domain.model.SavingItem
 import com.endlessyoung.mysavings.domain.model.toDomain
 import com.endlessyoung.mysavings.domain.model.toEntity
-import com.endlessyoung.mysavings.log.MySavingsLog
+import com.endlessyoung.mysavings.domain.usecase.GetGroupedSavingsUseCase
+import com.endlessyoung.mysavings.domain.usecase.GetTotalAssetsUseCase
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -24,20 +26,26 @@ import java.math.BigDecimal
 import java.util.Calendar
 
 class SavingViewModel(app: Application) : AndroidViewModel(app) {
-    private val repo = SavingRepository(AppDatabase.get(app).savingDao())
+    private val database = AppDatabase.get(app)
+    private val savingRepo = SavingRepository(database.savingDao())
+    private val fundRepo = FundRepository(database.fundDao())
+    private val planRepo = PlanRepository(database.planDao())
 
-    val savings: StateFlow<List<SavingItem>> = repo.allSavings
+    private val getTotalAssetsWorthUseCase = GetTotalAssetsUseCase(savingRepo, fundRepo)
+    private val getGroupedSavingsUseCase = GetGroupedSavingsUseCase(savingRepo)
+
+    val savings: StateFlow<List<SavingItem>> = savingRepo.allSavings
         .map { list -> list.map { it.toDomain() } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    val totalAmount: StateFlow<BigDecimal> = repo.getTotalAmount()
+    val totalAmount: StateFlow<BigDecimal> = getTotalAssetsWorthUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = BigDecimal.ZERO
         )
 
-    val bankDistribution: Flow<Map<String, BigDecimal>> = repo.allSavings.map { list ->
+    val bankDistribution: Flow<Map<String, BigDecimal>> = savingRepo.allSavings.map { list ->
         list.groupBy { it.bankName }
             .mapValues { entry ->
                 entry.value.fold(BigDecimal.ZERO) { acc, entity ->
@@ -46,7 +54,10 @@ class SavingViewModel(app: Application) : AndroidViewModel(app) {
             }
     }
 
-    val yearlySavings: Flow<Map<Int, BigDecimal>> = repo.allSavings.map { list ->
+    val upcomingPlan = planRepo.observeNextUpcoming()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    val yearlySavings: Flow<Map<Int, BigDecimal>> = savingRepo.allSavings.map { list ->
         val calendar = Calendar.getInstance()
         list.groupBy {
             calendar.timeInMillis = it.startTime
@@ -58,7 +69,7 @@ class SavingViewModel(app: Application) : AndroidViewModel(app) {
 
     private val calendar = Calendar.getInstance()
 
-    val availableYears: StateFlow<List<Int>> = repo.allSavings
+    val availableYears: StateFlow<List<Int>> = savingRepo.allSavings
         .map { list ->
             list.map {
                 calendar.timeInMillis = it.startTime
@@ -74,7 +85,7 @@ class SavingViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     val monthlySavingsByYear: Flow<Map<Int, BigDecimal>> =
-        combine(repo.allSavings, _filterYear) { list, year ->
+        combine(savingRepo.allSavings, _filterYear) { list, year ->
             val fullYearMap = (1..12).associateWith { BigDecimal.ZERO }.toMutableMap()
 
             val localCalendar = Calendar.getInstance()
@@ -93,31 +104,19 @@ class SavingViewModel(app: Application) : AndroidViewModel(app) {
             fullYearMap.toSortedMap()
         }
 
-    fun getGroupedSavings(year: Int, month: Int): Flow<Map<String, List<SavingItem>>> {
-        return repo.allSavings.map { entities ->
-            val cal = Calendar.getInstance()
-            entities.map { entity ->
-                entity.toDomain()
-            }.filter { item ->
-                cal.timeInMillis = item.startTime
-                val y = cal.get(Calendar.YEAR)
-                val m = cal.get(Calendar.MONTH) + 1
-                if (month == -1) y == year else (y == year && m == month)
-            }
-                .sortedByDescending { it.startTime }
-                .groupBy { item ->
-                    cal.timeInMillis = item.startTime
-                    if (month == -1) {
-                        "${cal.get(Calendar.MONTH) + 1}月"
-                    } else {
-                        "${cal.get(Calendar.MONTH) + 1}月${cal.get(Calendar.DAY_OF_MONTH)}日"
-                    }
-                }
-        }
-    }
+    fun getGroupedSavings(year: Int, month: Int) = getGroupedSavingsUseCase(year, month)
 
-    fun insert(item: SavingItem) = viewModelScope.launch { repo.insert(item.toEntity()) }
-    fun delete(item: SavingItem) = viewModelScope.launch { repo.delete(item.toEntity()) }
-    fun update(item: SavingItem) = viewModelScope.launch { repo.update(item.toEntity()) }
+    // 存款操作
+    fun insertSaving(item: SavingItem) = viewModelScope.launch { savingRepo.insert(item.toEntity()) }
+    fun deleteSaving(item: SavingItem) = viewModelScope.launch { savingRepo.delete(item.toEntity()) }
+    fun updateSaving(item: SavingItem) = viewModelScope.launch { savingRepo.update(item.toEntity()) }
+
+    // 公积金操作
+    fun updateFund(entity: FundEntity) = viewModelScope.launch { fundRepo.insert(entity) }
+    fun deleteFund(id: Long) = viewModelScope.launch { fundRepo.deleteById(id) }
+
+    // 计划操作
+    fun insertPlan(entity: PlanEntity) = viewModelScope.launch { planRepo.insert(entity) }
+    fun deletePlan(id: Long) = viewModelScope.launch { planRepo.deleteById(id) }
 
 }

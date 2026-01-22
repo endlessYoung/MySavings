@@ -11,11 +11,9 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.ArrayAdapter
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.endlessyoung.mysavings.MoneyUtils
 import com.endlessyoung.mysavings.R
-import com.endlessyoung.mysavings.databinding.FragmentAddSavingBinding
 import com.endlessyoung.mysavings.domain.model.SavingItem
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.math.BigDecimal
@@ -23,10 +21,12 @@ import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.core.graphics.drawable.toDrawable
+import com.endlessyoung.mysavings.databinding.DialogAddSavingBinding
+import com.endlessyoung.mysavings.ui.base.BaseDialog
 
-class AddSavingDialogFragment : DialogFragment() {
+class AddSavingDialogFragment : BaseDialog() {
 
-    private var _binding: FragmentAddSavingBinding? = null
+    private var _binding: DialogAddSavingBinding? = null
     private val binding get() = _binding!!
 
     // 默认选择今天
@@ -34,7 +34,7 @@ class AddSavingDialogFragment : DialogFragment() {
     private val vm: SavingViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentAddSavingBinding.inflate(inflater, container, false)
+        _binding = DialogAddSavingBinding.inflate(inflater, container, false)
         dialog?.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         return binding.root
     }
@@ -144,7 +144,7 @@ class AddSavingDialogFragment : DialogFragment() {
         calendar.add(Calendar.YEAR, years)
         val endTime = calendar.timeInMillis
 
-        vm.insert(
+        vm.insertSaving(
             SavingItem(
                 bankName = binding.spinnerBank.selectedItem.toString(),
                 amount = amount,

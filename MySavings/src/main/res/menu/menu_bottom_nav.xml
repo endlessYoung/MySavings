@@ -4,7 +4,7 @@
     <item
         android:id="@+id/StatsFragment"
         android:icon="@drawable/ic_data"
-        android:title="数据" />
+        android:title="统计" />
 
     <item
         android:id="@+id/HomeFragment"
