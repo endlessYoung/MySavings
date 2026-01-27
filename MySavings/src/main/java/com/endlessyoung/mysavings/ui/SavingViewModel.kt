@@ -38,12 +38,18 @@ class SavingViewModel(app: Application) : AndroidViewModel(app) {
         .map { list -> list.map { it.toDomain() } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    val totalAmount: StateFlow<BigDecimal> = getTotalAssetsWorthUseCase()
+    val totalAssets: StateFlow<BigDecimal> = getTotalAssetsWorthUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = BigDecimal.ZERO
         )
+
+    val totalFundAmount: StateFlow<BigDecimal> = fundRepo.getTotalFundAmount()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), BigDecimal.ZERO)
+
+    val totalSavingAmount: StateFlow<BigDecimal> = savingRepo.getTotalAmount()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), BigDecimal.ZERO)
 
     val bankDistribution: Flow<Map<String, BigDecimal>> = savingRepo.allSavings.map { list ->
         list.groupBy { it.bankName }
@@ -55,6 +61,9 @@ class SavingViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     val upcomingPlan = planRepo.observeNextUpcoming()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    val allPlans = planRepo.allPlans
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     val yearlySavings: Flow<Map<Int, BigDecimal>> = savingRepo.allSavings.map { list ->
@@ -112,8 +121,8 @@ class SavingViewModel(app: Application) : AndroidViewModel(app) {
     fun updateSaving(item: SavingItem) = viewModelScope.launch { savingRepo.update(item.toEntity()) }
 
     // 公积金操作
-    fun updateFund(entity: FundEntity) = viewModelScope.launch { fundRepo.insert(entity) }
-    fun deleteFund(id: Long) = viewModelScope.launch { fundRepo.deleteById(id) }
+    fun updateFund(entity: FundEntity) = viewModelScope.launch { fundRepo.upsert(entity) }
+    fun deleteFund(name: String) = viewModelScope.launch { fundRepo.deleteByName(name) }
 
     // 计划操作
     fun insertPlan(entity: PlanEntity) = viewModelScope.launch { planRepo.insert(entity) }

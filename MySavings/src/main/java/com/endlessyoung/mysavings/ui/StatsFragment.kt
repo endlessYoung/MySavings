@@ -253,6 +253,13 @@ class StatsFragment : Fragment() {
     }
 
     private fun updateBarChart(data: Map<out Any, BigDecimal>, isYearly: Boolean) {
+        // 1. 检查数据是否为空
+        if (data.isEmpty()) {
+            binding.barChart.data = null // 必须设为 null 才会显示 setNoDataText
+            binding.barChart.invalidate()
+            return
+        }
+
         val entries = data.entries.mapIndexed { index, entry ->
             BarEntry(index.toFloat(), entry.value.toFloat(), entry.key)
         }

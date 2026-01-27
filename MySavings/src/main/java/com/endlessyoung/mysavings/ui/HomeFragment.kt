@@ -1,19 +1,23 @@
 package com.endlessyoung.mysavings.ui
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.CalendarContract
+import android.transition.TransitionManager
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,212 +26,285 @@ import com.endlessyoung.mysavings.R
 import com.endlessyoung.mysavings.databinding.DialogActionMenuBinding
 import com.endlessyoung.mysavings.databinding.FragmentHomeBinding
 import com.endlessyoung.mysavings.log.MySavingsLog
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.Dispatchers
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-
+import java.math.BigDecimal
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
-
-    companion object {
-        private const val TAG = "HomeFragment"
-    }
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private var isAmountVisible = false
-    private var realAmountText = ""
-
+    // 使用 activityViewModels 保证与 DialogFragment 共享同一个 ViewModel 实例
     private val sharedVm: SavingViewModel by activityViewModels()
 
     private lateinit var adapter: SavingAdapter
+
+    private var isAmountVisible = false
+
+    private var isPlanExpanded = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHomeBinding.bind(view)
 
-        binding.savingsList.layoutManager = LinearLayoutManager(requireContext())
+        setupRecyclerView()
+        setupListeners()
+        observeData()
+        attachSwipeToDelete()
+        initPlanDashboard()
+    }
+
+    private fun setupRecyclerView() {
+        // 初始化适配器，点击列表项跳转详情
         adapter = SavingAdapter { item ->
             findNavController().navigate(R.id.action_homeFragment_to_SavingDetailFragment)
         }
-        binding.savingsList.adapter = adapter
-        binding.savingsList.setHasFixedSize(true)
 
-        binding.tvBankTotal.text = "****"
-        binding.ivToggleVisible.setOnClickListener {
-            toggleAmount()
-        }
+        binding.savingsList.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = this@HomeFragment.adapter
+            setHasFixedSize(true)
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                sharedVm.savings.collect { list ->
-                    MySavingsLog.d(TAG, "savings: $list, size: ${list.size}")
-                    adapter.submitList(list)
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                binding.fab.setOnClickListener {
-                    showActionMenu()
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                sharedVm.totalAmount.collect { total ->
-                    realAmountText = MoneyUtils.formatWithSymbol(total)
-
-                    if (isAmountVisible) {
-                        binding.tvBankTotal.text = realAmountText
+            // 滚动监听：向上滑动收缩 FAB，向下滑动展开 FAB
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (dy > 0) {
+                        binding.fab.shrink()
+                    } else {
+                        binding.fab.extend()
                     }
                 }
+            })
+        }
+    }
+
+    private fun setupListeners() {
+        // 资产显示/隐藏切换
+        binding.ivToggleVisible.setOnClickListener {
+            toggleAmountVisibility()
+        }
+
+        // 悬浮按钮弹出操作菜单
+        binding.fab.setOnClickListener {
+            showActionMenu()
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun observeData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // 1. 订阅资产核心数据流：总资产、存款合计、公积金合计
+                launch {
+                    combine(
+                        sharedVm.totalAssets,       // 由 GetTotalAssetsUseCase 提供
+                        sharedVm.totalSavingAmount, // 仅银行存款
+                        sharedVm.totalFundAmount    // 仅公积金
+                    ) { total, saving, fund ->
+                        Triple(total, saving, fund)
+                    }.collect { (total, saving, fund) ->
+                        updateFinancialCards(total, saving, fund)
+                    }
+                }
+
+                // 2. 订阅存款列表数据
+                launch {
+                    sharedVm.savings.collect { list ->
+                        MySavingsLog.d("HomeFragment", "更新列表数据，条数: ${list.size}")
+                        adapter.submitList(list)
+                    }
+                }
+
+                // 3. 支出计划
+                setupCollapsibleDashboard()
+            }
+        }
+    }
+
+    private fun setupCollapsibleDashboard() {
+        val planAdapter = ExpandedPlanAdapter { plan ->
+            // 点击具体计划同步日历
+            syncToCalendar(plan)
+        }
+        binding.rvExpandedPlans.adapter = planAdapter
+        binding.rvExpandedPlans.layoutManager = LinearLayoutManager(requireContext())
+
+        // 观察数据并计算汇总
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedVm.allPlans.collect { plans ->
+                val total = plans?.sumOf { it.amount }
+                binding.tvPlanSummary.text =
+                    "本月计划支出: ${MoneyUtils.formatWithSymbol(total)} (${plans?.size}笔)"
+                planAdapter.submitList(plans)
+
+                // 无数据自动隐藏整个卡片
+                binding.planDashboardCard.visibility =
+                    if (plans?.isEmpty() == true) View.GONE else View.VISIBLE
             }
         }
 
-        binding.savingsList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                if (dy > 0) {
-                    binding.fab.shrink()
-                } else {
-                    binding.fab.extend()
-                }
-            }
-        })
+        // 切换折叠逻辑
+        binding.layoutPlanHeader.setOnClickListener {
+            isPlanExpanded = !isPlanExpanded
 
-        attachSwipeToDelete()
+            binding.layoutPlanDetails.visibility = if (isPlanExpanded) View.VISIBLE else View.GONE
+
+            TransitionManager.beginDelayedTransition(binding.homeRoot)
+
+            binding.ivExpandArrow.animate()
+                .rotation(if (isPlanExpanded) 180f else 0f)
+                .setDuration(300)
+                .start()
+        }
+    }
+
+    private fun initPlanDashboard() {
+        val planAdapter = ExpandedPlanAdapter { plan -> syncToCalendar(plan) }
+
+        binding.rvExpandedPlans.apply {
+            adapter = planAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+
+            // 添加内置分割线
+            addItemDecoration(
+                DrawableDividerDecoration(
+                    requireContext(),
+                    R.drawable.divider_fancy
+                )
+            )
+        }
+    }
+
+    private fun syncToCalendar(plan: com.endlessyoung.mysavings.data.local.entity.PlanEntity) {
+        try {
+            val intent = Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.Events.TITLE, "支出提醒: ${plan.title}")
+                .putExtra(
+                    CalendarContract.Events.DESCRIPTION,
+                    "预计金额: ${MoneyUtils.formatWithSymbol(plan.amount)}"
+                )
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, plan.planDate)
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, plan.planDate + 3600000)
+
+            startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "无法调起日历", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateFinancialCards(total: BigDecimal, saving: BigDecimal, fund: BigDecimal) {
+        if (isAmountVisible) {
+            binding.tvNetWorthAmount.text = MoneyUtils.formatWithSymbol(total)
+            binding.tvBankTotal.text = "存款: ${MoneyUtils.formatWithSymbol(saving)}"
+            binding.tvFundTotal.text = "公积金: ${MoneyUtils.formatWithSymbol(fund)}"
+            binding.ivToggleVisible.setImageResource(R.drawable.ic_show)
+        } else {
+            binding.tvNetWorthAmount.text = "****"
+            binding.tvBankTotal.text = "存款: ****"
+            binding.tvFundTotal.text = "公积金: ****"
+            binding.ivToggleVisible.setImageResource(R.drawable.ic_hide)
+        }
+    }
+
+
+    private fun toggleAmountVisibility() {
+        isAmountVisible = !isAmountVisible
+
+        binding.allPropertiesCard.animate()
+            .alpha(0.6f)
+            .setDuration(120)
+            .withEndAction {
+                // 动画执行一半时更新文本
+                updateFinancialCards(
+                    sharedVm.totalAssets.value,
+                    sharedVm.totalSavingAmount.value,
+                    sharedVm.totalFundAmount.value
+                )
+                binding.allPropertiesCard.animate().alpha(1f).setDuration(120).start()
+            }.start()
     }
 
     private fun showActionMenu() {
-        val bottomSheet = com.google.android.material.bottomsheet.BottomSheetDialog(
-            requireContext(),
-            R.style.BottomSheetDialogTheme
-        )
+        val bottomSheet = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
         val dialogBinding = DialogActionMenuBinding.inflate(layoutInflater)
         bottomSheet.setContentView(dialogBinding.root)
 
-        // 1. 新增储蓄
-        dialogBinding.btnNavAddSaving.setOnClickListener {
-            bottomSheet.dismiss()
-            findNavController().navigate(R.id.action_homeFragment_to_AddSavingDialogFragment)
+        dialogBinding.apply {
+            // 导航至：新增存款
+            btnNavAddSaving.setOnClickListener {
+                bottomSheet.dismiss()
+                findNavController().navigate(R.id.action_homeFragment_to_AddSavingDialogFragment)
+            }
+            // 导航至：更新公积金
+            btnNavUpdateFund.setOnClickListener {
+                bottomSheet.dismiss()
+                findNavController().navigate(R.id.action_homeFragment_to_AddFundDialogFragment)
+            }
+            // 导航至：新增支出计划
+            btnNavAddPlan.setOnClickListener {
+                bottomSheet.dismiss()
+                findNavController().navigate(R.id.action_homeFragment_to_AddPlanDialogFragment)
+            }
         }
-
-        // 2. 更新公积金
-        dialogBinding.btnNavUpdateFund.setOnClickListener {
-            bottomSheet.dismiss()
-             findNavController().navigate(R.id.action_homeFragment_to_AddFundDialogFragment)
-        }
-
-        // 3. 新增支出计划
-        dialogBinding.btnNavAddPlan.setOnClickListener {
-            bottomSheet.dismiss()
-             findNavController().navigate(R.id.action_homeFragment_to_AddPlanDialogFragment)
-        }
-
         bottomSheet.show()
     }
 
-    private fun attachSwipeToDelete(){
+    private fun attachSwipeToDelete() {
         val deleteIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete)
         val background = Color.RED.toDrawable()
 
-        val callback = object : ItemTouchHelper.SimpleCallback (
-            0,
-            ItemTouchHelper.LEFT
-        ){
+        val callback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
+                r: RecyclerView,
+                v: RecyclerView.ViewHolder,
+                t: RecyclerView.ViewHolder
             ) = false
 
-            override fun onSwiped(
-                viewHolder: RecyclerView.ViewHolder,
-                direction: Int
-            ) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val pos = viewHolder.adapterPosition
                 if (pos != RecyclerView.NO_POSITION) {
                     val item = adapter.currentList[pos]
                     sharedVm.deleteSaving(item)
-
-                    Toast.makeText(requireContext(), "已删除 ${item.bankName}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "已移除 ${item.bankName} 记录",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
             override fun onChildDraw(
-                c: Canvas,
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                dX: Float,
-                dY: Float,
-                actionState: Int,
-                isCurrentlyActive: Boolean
+                c: Canvas, r: RecyclerView, v: RecyclerView.ViewHolder,
+                dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
             ) {
-                val itemView = viewHolder.itemView
-
+                val itemView = v.itemView
+                // 绘制红色删除背景
                 background.setBounds(
-                    itemView.right + dX.toInt(),
-                    itemView.top,
-                    itemView.right,
-                    itemView.bottom
+                    itemView.right + dX.toInt(), itemView.top,
+                    itemView.right, itemView.bottom
                 )
                 background.draw(c)
 
+                // 绘制删除图标
                 deleteIcon?.let {
                     val iconMargin = (itemView.height - it.intrinsicHeight) / 2
                     val top = itemView.top + iconMargin
                     val left = itemView.right - iconMargin - it.intrinsicWidth
                     val right = itemView.right - iconMargin
                     val bottom = top + it.intrinsicHeight
-
                     it.setBounds(left, top, right, bottom)
                     it.draw(c)
                 }
 
-                super.onChildDraw(
-                    c,
-                    recyclerView,
-                    viewHolder,
-                    dX,
-                    dY,
-                    actionState,
-                    isCurrentlyActive
-                )
+                super.onChildDraw(c, r, v, dX, dY, actionState, isCurrentlyActive)
             }
-
         }
-
         ItemTouchHelper(callback).attachToRecyclerView(binding.savingsList)
     }
-
-    private fun toggleAmount() {
-        isAmountVisible = !isAmountVisible
-
-        binding.tvBankTotal.animate()
-            .scaleX(0.8f).scaleY(0.8f).alpha(0f)
-            .setDuration(120)
-            .withEndAction {
-                if (isAmountVisible) {
-                    binding.tvBankTotal.text = realAmountText
-                    binding.ivToggleVisible.setImageResource(R.drawable.ic_show)
-                } else {
-                    binding.tvBankTotal.text = "****"
-                    binding.ivToggleVisible.setImageResource(R.drawable.ic_hide)
-                }
-
-                binding.tvBankTotal.animate()
-                    .scaleX(1f).scaleY(1f).alpha(1f)
-                    .setDuration(120)
-                    .start()
-            }
-            .start()
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

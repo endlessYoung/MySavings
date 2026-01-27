@@ -1,0 +1,27 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 上阴影 -->
+    <item android:bottom="1dp">
+        <inset
+            android:insetLeft="24dp"
+            android:insetRight="24dp">
+            <shape>
+                <size android:height="1dp"/>
+                <solid android:color="#1AFFFFFF"/>
+            </shape>
+        </inset>
+    </item>
+
+    <!-- 下分割线 -->
+    <item>
+        <inset
+            android:insetLeft="24dp"
+            android:insetRight="24dp">
+            <shape>
+                <size android:height="1dp"/>
+                <solid android:color="#1AFF9800"/>
+            </shape>
+        </inset>
+    </item>
+
+</layer-list>

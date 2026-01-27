@@ -34,14 +34,15 @@ interface SavingDao: BaseDao<SavingEntity> {
 
 @Dao
 interface FundDao: BaseDao<FundEntity> {
-    @Query("SELECT * FROM provident_fund")
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertOrUpdate(fund: FundEntity)
+
+    @Query("SELECT * FROM fund_table")
     fun observeAll(): Flow<List<FundEntity>>
 
-    @Query("DELETE FROM provident_fund WHERE id = :id")
-    suspend fun deleteById(id: Long)
-
-    @Query("SELECT * FROM provident_fund WHERE ownerName = :name LIMIT 1")
-    suspend fun getFundByOwner(name: String): FundEntity?
+    // 注意：如果你把 ownerName 改为主键，这里的删除逻辑也要对应修改
+    @Query("DELETE FROM fund_table WHERE ownerName = :name")
+    suspend fun deleteByName(name: String)
 }
 
 @Dao

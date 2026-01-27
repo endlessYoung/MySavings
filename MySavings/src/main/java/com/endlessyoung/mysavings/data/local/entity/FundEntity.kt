@@ -4,9 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.math.BigDecimal
 
-@Entity(tableName = "provident_fund")
+@Entity(tableName = "fund_table")
 data class FundEntity(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @PrimaryKey
     val ownerName: String,
     val totalBalance: BigDecimal,
     val monthlyAmount: BigDecimal,

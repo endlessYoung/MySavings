@@ -4,7 +4,6 @@ import com.endlessyoung.mysavings.data.local.entity.FundEntity
 import java.math.BigDecimal
 
 data class ProvidentFund(
-    val id: Long = 0,
     val ownerName: String,
     val totalBalance: BigDecimal,
     val monthlyAmount: BigDecimal,
@@ -12,7 +11,6 @@ data class ProvidentFund(
 )
 
 fun FundEntity.toDomain() = ProvidentFund(
-    id = id,
     ownerName = ownerName,
     totalBalance = totalBalance,
     monthlyAmount = monthlyAmount,
@@ -20,7 +18,6 @@ fun FundEntity.toDomain() = ProvidentFund(
 )
 
 fun ProvidentFund.toEntity() = FundEntity(
-    id = id,
     ownerName = ownerName,
     totalBalance = totalBalance,
     monthlyAmount = monthlyAmount,

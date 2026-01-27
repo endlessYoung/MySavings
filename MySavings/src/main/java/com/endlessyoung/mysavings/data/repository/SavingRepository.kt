@@ -7,6 +7,7 @@ import com.endlessyoung.mysavings.data.local.dao.SavingDao
 import com.endlessyoung.mysavings.data.local.entity.FundEntity
 import com.endlessyoung.mysavings.data.local.entity.PlanEntity
 import com.endlessyoung.mysavings.data.local.entity.SavingEntity
+import com.endlessyoung.mysavings.log.MySavingsLog
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.math.BigDecimal
@@ -50,8 +51,12 @@ class FundRepository(private val dao: FundDao) : BaseRepository<FundEntity>(dao)
     val allFunds: Flow<List<FundEntity>>
         get() = dao.observeAll()
 
-    suspend fun deleteById(id: Long) {
-        dao.deleteById(id)
+    suspend fun deleteByName(name: String) {
+        dao.deleteByName(name)
+    }
+
+    suspend fun upsert(fund: FundEntity) {
+        dao.insertOrUpdate(fund)
     }
 
     fun getTotalFundAmount(): Flow<BigDecimal> {
