@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".ui.MainActivity">
 
     <!-- 顶部 AppBar -->
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/main_blue"
@@ -37,21 +37,18 @@
                     android:orientation="horizontal"
                     android:paddingHorizontal="12dp">
 
-                    <TextView
-                        android:id="@+id/tvMode"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:gravity="center"
-                        android:text="排序"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black" />
-
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:layout_marginStart="4dp"
                         android:src="@drawable/ic_sort" />
+
+                    <Spinner
+                        android:id="@+id/spSort"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="4dp"
+                        android:spinnerMode="dropdown"
+                        android:background="@android:color/transparent" />
 
                     <View
                         android:layout_width="1dp"
@@ -85,8 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:navGraph="@navigation/nav_graph" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
@@ -96,6 +92,7 @@
         app:menu="@menu/menu_bottom_nav"
         app:labelVisibilityMode="labeled"
         app:itemIconTint="@color/bottom_nav_selector"
-        app:itemTextColor="@color/bottom_nav_selector" />
+        app:itemTextColor="@color/bottom_nav_selector"
+        app:itemIconSize="24dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

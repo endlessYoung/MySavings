@@ -4,5 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="main_blue">#1677FF</color>
     <color name="main_blue_dark">#1976D2</color>
+    <color name="bg_page_color">#F4F6F8</color>
 
 </resources>

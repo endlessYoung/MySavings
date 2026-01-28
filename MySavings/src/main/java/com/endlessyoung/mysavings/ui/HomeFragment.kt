@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.transition.TransitionManager
@@ -11,6 +12,12 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Spinner
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -91,6 +98,63 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.fab.setOnClickListener {
             showActionMenu()
         }
+
+        // 顶部 toolbar（在 Activity 里）上的搜索和排序，只在 HomeFragment 里生效
+        val activity = requireActivity()
+        val spSort = activity.findViewById<Spinner>(R.id.spSort)
+        val etSearch = activity.findViewById<EditText>(R.id.etSearch)
+        val btnSearch = activity.findViewById<ImageView>(R.id.btnSearch)
+
+        // 设置 Spinner 选项
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.sort_mode_labels,
+            R.layout.item_spinner_selected
+        ).also { adapter ->
+            adapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
+            spSort.adapter = adapter
+        }
+
+        // 根据当前排序模式设置默认选择
+        spSort.setSelection(
+            when (sharedVm.sortMode.value) {
+                SavingSortMode.DEFAULT -> 0
+                SavingSortMode.AMOUNT_DESC -> 1
+                SavingSortMode.RATE_DESC -> 2
+            },
+            false
+        )
+
+        spSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val mode = when (position) {
+                    0 -> SavingSortMode.DEFAULT
+                    1 -> SavingSortMode.AMOUNT_DESC
+                    2 -> SavingSortMode.RATE_DESC
+                    else -> SavingSortMode.DEFAULT
+                }
+                if (sharedVm.sortMode.value != mode) {
+                    sharedVm.setSortMode(mode)
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+        }
+
+        // 搜索输入实时过滤
+        etSearch.addTextChangedListener { text ->
+            sharedVm.setSearchQuery(text?.toString().orEmpty())
+        }
+
+        // 点击搜索按钮也触发一次（兼容用户习惯）
+        btnSearch.setOnClickListener {
+            sharedVm.setSearchQuery(etSearch.text?.toString().orEmpty())
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -110,9 +174,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     }
                 }
 
-                // 2. 订阅存款列表数据
+                // 2. 订阅存款列表数据（带搜索和排序）
                 launch {
-                    sharedVm.savings.collect { list ->
+                    sharedVm.filteredSavings.collect { list ->
                         MySavingsLog.d("HomeFragment", "更新列表数据，条数: ${list.size}")
                         adapter.submitList(list)
                     }
@@ -255,7 +319,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun attachSwipeToDelete() {
         val deleteIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete)
-        val background = Color.RED.toDrawable()
+        // 更柔和的 Gmail 风格红色背景
+        val background = Color.parseColor("#F44336").toDrawable()
+        val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.WHITE
+            textSize = 14f * resources.displayMetrics.scaledDensity
+        }
 
         val callback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             override fun onMove(
@@ -282,24 +351,48 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
             ) {
                 val itemView = v.itemView
-                // 绘制红色删除背景
-                background.setBounds(
-                    itemView.right + dX.toInt(), itemView.top,
-                    itemView.right, itemView.bottom
-                )
-                background.draw(c)
 
-                // 绘制删除图标
-                deleteIcon?.let {
-                    val iconMargin = (itemView.height - it.intrinsicHeight) / 2
-                    val top = itemView.top + iconMargin
-                    val left = itemView.right - iconMargin - it.intrinsicWidth
-                    val right = itemView.right - iconMargin
-                    val bottom = top + it.intrinsicHeight
-                    it.setBounds(left, top, right, bottom)
-                    it.draw(c)
+                if (dX < 0) {
+                    // 向左滑动时，计算滑动进度，控制背景和文字透明度
+                    val rawProgress = -dX / itemView.width
+                    val swipeProgress = minOf(rawProgress * 1.8f, 1f) // 提前拉满
+
+                    // 让一开始就更鲜艳：设置一个最低透明度
+                    val minAlpha = 80
+                    val alpha = (minAlpha + (255 - minAlpha) * swipeProgress)
+                        .toInt()
+                        .coerceIn(minAlpha, 255)
+
+                    background.alpha = alpha
+                    background.setBounds(
+                        itemView.right + dX.toInt(), itemView.top,
+                        itemView.right, itemView.bottom
+                    )
+                    background.draw(c)
+
+                    deleteIcon?.let {
+                        val iconMargin = (itemView.height - it.intrinsicHeight) / 2
+                        val top = itemView.top + iconMargin
+                        val left = itemView.right - iconMargin - it.intrinsicWidth
+                        val right = itemView.right - iconMargin
+                        val bottom = top + it.intrinsicHeight
+                        it.setBounds(left, top, right, bottom)
+                        it.alpha = alpha
+                        it.draw(c)
+
+                        // 绘制“删除”文字，靠近图标，居中对齐
+                        val label = "删除"
+                        textPaint.alpha = alpha
+                        val textWidth = textPaint.measureText(label)
+                        val marginPx = (8 * itemView.resources.displayMetrics.density)
+                        val textX = left - marginPx - textWidth
+                        val textY =
+                            itemView.top + itemView.height / 2f - (textPaint.descent() + textPaint.ascent()) / 2f
+                        c.drawText(label, textX, textY, textPaint)
+                    }
                 }
 
+                // 保持 item 自身的位移效果，让滑动手感接近 Gmail
                 super.onChildDraw(c, r, v, dX, dY, actionState, isCurrentlyActive)
             }
         }

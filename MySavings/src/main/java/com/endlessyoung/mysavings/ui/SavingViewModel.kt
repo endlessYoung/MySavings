@@ -25,6 +25,12 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.Calendar
 
+enum class SavingSortMode {
+    DEFAULT,       // 按开始时间倒序
+    AMOUNT_DESC,   // 按金额倒序
+    RATE_DESC      // 按利率倒序
+}
+
 class SavingViewModel(app: Application) : AndroidViewModel(app) {
     private val database = AppDatabase.get(app)
     private val savingRepo = SavingRepository(database.savingDao())
@@ -34,9 +40,39 @@ class SavingViewModel(app: Application) : AndroidViewModel(app) {
     private val getTotalAssetsWorthUseCase = GetTotalAssetsUseCase(savingRepo, fundRepo)
     private val getGroupedSavingsUseCase = GetGroupedSavingsUseCase(savingRepo)
 
-    val savings: StateFlow<List<SavingItem>> = savingRepo.allSavings
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery
+
+    private val _sortMode = MutableStateFlow(SavingSortMode.DEFAULT)
+    val sortMode: StateFlow<SavingSortMode> = _sortMode
+
+    private val sourceSavings: Flow<List<SavingItem>> = savingRepo.allSavings
         .map { list -> list.map { it.toDomain() } }
+
+    val savings: StateFlow<List<SavingItem>> = sourceSavings
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    val filteredSavings: StateFlow<List<SavingItem>> =
+        combine(sourceSavings, _searchQuery, _sortMode) { list, query, mode ->
+            var result = list
+
+            if (query.isNotBlank()) {
+                val q = query.trim().lowercase()
+                result = result.filter { item ->
+                    item.bankName.lowercase().contains(q) ||
+                            item.amount.toPlainString().contains(q) ||
+                            item.year.toString().contains(q)
+                }
+            }
+
+            result = when (mode) {
+                SavingSortMode.DEFAULT -> result.sortedByDescending { it.startTime }
+                SavingSortMode.AMOUNT_DESC -> result.sortedByDescending { it.amount }
+                SavingSortMode.RATE_DESC -> result.sortedByDescending { it.interestRate }
+            }
+
+            result
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     val totalAssets: StateFlow<BigDecimal> = getTotalAssetsWorthUseCase()
         .stateIn(
@@ -91,6 +127,14 @@ class SavingViewModel(app: Application) : AndroidViewModel(app) {
 
     fun setFilterYear(year: Int) {
         _filterYear.value = year
+    }
+
+    fun setSearchQuery(keyword: String) {
+        _searchQuery.value = keyword
+    }
+
+    fun setSortMode(mode: SavingSortMode) {
+        _sortMode.value = mode
     }
 
     val monthlySavingsByYear: Flow<Map<Int, BigDecimal>> =

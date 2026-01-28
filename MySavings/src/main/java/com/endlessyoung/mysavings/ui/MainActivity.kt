@@ -1,27 +1,27 @@
 package com.endlessyoung.mysavings.ui
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.toColorInt
 import androidx.core.view.WindowCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.FloatingWindow
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI.setupWithNavController
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.endlessyoung.mysavings.R
 import com.endlessyoung.mysavings.databinding.ActivityMainBinding
 import com.endlessyoung.mysavings.domain.model.SavingItem
@@ -69,6 +69,36 @@ class MainActivity : AppCompatActivity() {
             )
             setupActionBarWithNavController(navController, appBarConfiguration)
             setupWithNavController(binding.bottomNav, navController)
+
+            // 只在 HomeFragment 显示顶部 AppBar / Toolbar
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                if (destination is FloatingWindow) {
+                    return@addOnDestinationChangedListener
+                }
+
+                if (destination.id == R.id.HomeFragment) {
+                    binding.appBar.visibility = View.VISIBLE
+                    window.statusBarColor = ContextCompat.getColor(this, R.color.main_blue)
+                    controller.isAppearanceLightStatusBars = false
+
+                    // HomeFragment需要有上边距，避免被AppBar遮挡
+                    // 使用 AppBarLayout 的高度来动态调整
+                    binding.appBar.post {
+                        binding.navHostFragmentContentMain.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                            topMargin = binding.appBar.height
+                        }
+                    }
+                } else {
+                    binding.appBar.visibility = View.GONE
+                    window.statusBarColor = ContextCompat.getColor(this, R.color.bg_page_color)
+                    controller.isAppearanceLightStatusBars = true
+
+                    // 其他页面去除上边距，实现全屏
+                    binding.navHostFragmentContentMain.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                        topMargin = 0
+                    }
+                }
+            }
         } catch (e: Exception) {
             MySavingsLog.e(TAG, e.message.toString())
         }

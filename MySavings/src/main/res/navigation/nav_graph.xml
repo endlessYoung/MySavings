@@ -70,7 +70,7 @@
     <fragment
         android:id="@+id/StatsFragment"
         android:name="com.endlessyoung.mysavings.ui.StatsFragment"
-        android:label="统计"
+        android:label=""
         tools:layout="@layout/fragment_stats">
 
         <action
@@ -97,7 +97,7 @@
     <fragment
         android:id="@+id/MineFragment"
         android:name="com.endlessyoung.mysavings.ui.MineFragment"
-        android:label="@string/mine_fragment_label"
-        tools:layout="@layout/fragment_stats" />
+        android:label=""
+        tools:layout="@layout/fragment_mine" />
 
 </navigation>
