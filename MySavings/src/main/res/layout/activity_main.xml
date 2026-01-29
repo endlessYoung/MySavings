@@ -12,67 +12,86 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/main_blue"
-        app:elevation="0dp"
+        app:elevation="2dp"
         app:liftOnScroll="false"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_height="56dp"
+            android:background="@color/main_blue"
+            android:elevation="0dp"
+            android:paddingHorizontal="8dp">
 
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <!-- 标题 -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="我的储蓄"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="0dp" />
+
+                <!-- 搜索框 -->
                 <LinearLayout
                     android:id="@+id/searchBar"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="36dp"
-                    android:layout_marginHorizontal="16dp"
-                    android:background="@drawable/bg_toolbar_search"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@drawable/bg_search_bar"
                     android:gravity="center_vertical"
-                    android:layout_gravity="center"
+                    android:minWidth="200dp"
                     android:orientation="horizontal"
                     android:paddingHorizontal="12dp">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_sort" />
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_search"
+                        app:tint="@color/text_tertiary" />
+
+                    <EditText
+                        android:id="@+id/etSearch"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:background="@null"
+                        android:hint="搜索..."
+                        android:maxLines="1"
+                        android:textColor="@color/white"
+                        android:textColorHint="#80FFFFFF"
+                        android:textSize="14sp" />
 
                     <Spinner
                         android:id="@+id/spSort"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
+                        android:layout_marginStart="8dp"
                         android:spinnerMode="dropdown"
-                        android:background="@android:color/transparent" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="18dp"
-                        android:layout_marginHorizontal="8dp"
-                        android:background="#DDDDDD" />
-
-                    <EditText
-                        android:id="@+id/etSearch"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:hint="银行/金额/日期"
-                        android:maxLines="1"
-                        android:textColor="@color/black" />
-
-                    <ImageView
-                        android:id="@+id/btnSearch"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_search" />
+                        android:background="@drawable/ic_arrow_drop_down"
+                        android:backgroundTint="@color/white" />
                 </LinearLayout>
-            </FrameLayout>
+
+                <!-- 菜单按钮 -->
+                <ImageView
+                    android:id="@+id/btnMenu"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_menu"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="4dp"
+                    app:tint="@color/white" />
+            </LinearLayout>
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -93,6 +112,8 @@
         app:labelVisibilityMode="labeled"
         app:itemIconTint="@color/bottom_nav_selector"
         app:itemTextColor="@color/bottom_nav_selector"
-        app:itemIconSize="24dp" />
+        app:itemIconSize="24dp"
+        app:itemRippleColor="@color/main_blue_alpha"
+        android:elevation="4dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

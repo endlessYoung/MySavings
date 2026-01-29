@@ -3,14 +3,14 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
-    android:background="#F8F9FA"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="56dp"
         android:background="@color/white"
-        android:paddingHorizontal="16dp">
+        android:paddingHorizontal="12dp">
 
         <TextView
             android:id="@+id/recordListTitle"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="2025年 存款明细"
-            android:textColor="#263238"
+            android:textColor="@color/text_primary"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -48,13 +48,13 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:src="@drawable/ic_no_data"
-                app:tint="#CFD8DC" />
+                app:tint="@color/divider_color" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="该时段暂无记录"
-                android:textColor="#90A4AE" />
+                android:textColor="@color/text_tertiary" />
         </LinearLayout>
     </FrameLayout>
 </LinearLayout>

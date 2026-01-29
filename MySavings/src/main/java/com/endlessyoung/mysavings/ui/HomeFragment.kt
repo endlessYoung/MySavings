@@ -103,7 +103,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val activity = requireActivity()
         val spSort = activity.findViewById<Spinner>(R.id.spSort)
         val etSearch = activity.findViewById<EditText>(R.id.etSearch)
-        val btnSearch = activity.findViewById<ImageView>(R.id.btnSearch)
+//        val btnSearch = activity.findViewById<ImageView>(R.id.btnSearch)
 
         // 设置 Spinner 选项
         ArrayAdapter.createFromResource(
@@ -151,10 +151,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             sharedVm.setSearchQuery(text?.toString().orEmpty())
         }
 
-        // 点击搜索按钮也触发一次（兼容用户习惯）
-        btnSearch.setOnClickListener {
-            sharedVm.setSearchQuery(etSearch.text?.toString().orEmpty())
-        }
+//        btnSearch.setOnClickListener {
+//            sharedVm.setSearchQuery(etSearch.text?.toString().orEmpty())
+//        }
     }
 
     @SuppressLint("SetTextI18n")

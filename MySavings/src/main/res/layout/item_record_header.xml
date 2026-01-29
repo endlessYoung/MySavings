@@ -1,10 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#F8F9FA"
+    android:background="@color/neutral_200"
     android:orientation="horizontal"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="10dp">
+    android:paddingHorizontal="12dp"
+    android:paddingVertical="8dp">
 
     <View
         android:layout_width="4dp"
@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="5月"
-        android:textColor="#546E7A"
+        android:textColor="@color/text_secondary"
         android:textSize="14sp"
         android:textStyle="bold" />
 
@@ -31,7 +31,7 @@
         android:id="@+id/tvHeaderTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#90A4AE"
+        android:textColor="@color/text_tertiary"
         android:textSize="12sp"
         android:visibility="gone" />
 

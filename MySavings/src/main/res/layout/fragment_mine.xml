@@ -1,12 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@drawable/bg_main">
+    android:background="@color/white">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -19,38 +20,179 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="16dp"
+            android:paddingTop="12dp"
             android:paddingBottom="24dp">
 
-            <!-- 支出计划提醒卡片 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/gradient_user_profile"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/ic_user"
+                        android:background="@drawable/bg_circle_white"
+                        android:padding="16dp"
+                        app:tint="@color/main_blue" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="用户名"
+                            android:textColor="@color/text_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="我的储蓄账本"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_qr_code"
+                        app:tint="@color/text_secondary" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvTotalRecords"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="@color/main_blue"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="记录总数"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvTotalPlans"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="@color/main_blue"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="计划数量"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvDaysUsed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="@color/main_blue"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="使用天数"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardReminders"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="#FFFFFFFF"
-                app:cardCornerRadius="18dp"
-                app:cardElevation="3dp"
-                app:strokeColor="#E0E6F0"
+                app:cardBackgroundColor="@color/bg_card_color"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/border_color"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingVertical="12dp">
+                    android:padding="16dp">
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingHorizontal="16dp">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="4dp"
+                            android:layout_height="18dp"
+                            android:background="@color/main_blue" />
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="12dp"
                             android:text="支出计划提醒"
-                            android:textColor="#263238"
+                            android:textColor="@color/text_primary"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -58,43 +200,40 @@
                             android:id="@+id/btnViewAllReminders"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
                             android:text="查看全部"
-                            android:textColor="#1976D2"
+                            android:textColor="@color/main_blue"
                             android:textSize="13sp" />
-                    </RelativeLayout>
+                    </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvReminders"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="12dp"
                         android:clipToPadding="false"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="12dp"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:listitem="@layout/item_reminder_card" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 外观与主题 -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardAppearance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="#FFFFFFFF"
-                app:cardCornerRadius="18dp"
+                app:cardBackgroundColor="@color/bg_card_color"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:strokeColor="#E0E6F0"
+                app:strokeColor="@color/border_color"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingVertical="8dp">
+                    android:padding="8dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -102,7 +241,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="6dp"
                         android:text="外观与主题"
-                        android:textColor="#90A4AE"
+                        android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
                     <LinearLayout
@@ -111,13 +250,14 @@
                         android:layout_height="48dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="16dp">
+                        android:paddingHorizontal="16dp"
+                        android:background="?attr/selectableItemBackground">
 
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/ic_mine"
-                            android:tint="@color/main_blue" />
+                            android:src="@drawable/ic_user"
+                            app:tint="@color/main_blue" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -125,7 +265,7 @@
                             android:layout_marginStart="12dp"
                             android:layout_weight="1"
                             android:text="主题模式"
-                            android:textColor="#263238"
+                            android:textColor="@color/text_primary"
                             android:textSize="14sp" />
 
                         <TextView
@@ -133,30 +273,29 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="跟随系统"
-                            android:textColor="#78909C"
+                            android:textColor="@color/text_secondary"
                             android:textSize="13sp" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 偏好设置 -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardPreferences"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="#FFFFFFFF"
-                app:cardCornerRadius="18dp"
+                app:cardBackgroundColor="@color/bg_card_color"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:strokeColor="#E0E6F0"
+                app:strokeColor="@color/border_color"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingVertical="8dp">
+                    android:padding="8dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -164,7 +303,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="6dp"
                         android:text="偏好设置"
-                        android:textColor="#90A4AE"
+                        android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
                     <LinearLayout
@@ -173,13 +312,14 @@
                         android:layout_height="48dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="16dp">
+                        android:paddingHorizontal="16dp"
+                        android:background="?attr/selectableItemBackground">
 
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/ic_sort"
-                            android:tint="@color/main_blue" />
+                            android:src="@drawable/ic_user"
+                            app:tint="@color/main_blue" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -187,7 +327,7 @@
                             android:layout_marginStart="12dp"
                             android:layout_weight="1"
                             android:text="默认排序方式"
-                            android:textColor="#263238"
+                            android:textColor="@color/text_primary"
                             android:textSize="14sp" />
 
                         <TextView
@@ -195,7 +335,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="按时间"
-                            android:textColor="#78909C"
+                            android:textColor="@color/text_secondary"
                             android:textSize="13sp" />
                     </LinearLayout>
 
@@ -205,13 +345,14 @@
                         android:layout_height="48dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="16dp">
+                        android:paddingHorizontal="16dp"
+                        android:background="?attr/selectableItemBackground">
 
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/ic_hide"
-                            android:tint="@color/main_blue" />
+                            android:src="@drawable/ic_user"
+                            app:tint="@color/main_blue" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -219,7 +360,7 @@
                             android:layout_marginStart="12dp"
                             android:layout_weight="1"
                             android:text="启动时隐藏资产金额"
-                            android:textColor="#263238"
+                            android:textColor="@color/text_primary"
                             android:textSize="14sp" />
 
                         <androidx.appcompat.widget.SwitchCompat
@@ -230,24 +371,23 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 隐私与安全 -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardSecurity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="#FFFFFFFF"
-                app:cardCornerRadius="18dp"
+                app:cardBackgroundColor="@color/bg_card_color"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:strokeColor="#E0E6F0"
+                app:strokeColor="@color/border_color"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                android:paddingVertical="8dp">
+                    android:paddingVertical="8dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -255,7 +395,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="6dp"
                         android:text="隐私与安全"
-                        android:textColor="#90A4AE"
+                        android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
                     <LinearLayout
@@ -270,7 +410,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:src="@drawable/ic_user"
-                            android:tint="@color/main_blue" />
+                            app:tint="@color/main_blue" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -278,7 +418,7 @@
                             android:layout_marginStart="12dp"
                             android:layout_weight="1"
                             android:text="应用锁（指纹 / PIN）"
-                            android:textColor="#263238"
+                            android:textColor="@color/text_primary"
                             android:textSize="14sp" />
 
                         <androidx.appcompat.widget.SwitchCompat
@@ -289,17 +429,16 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 数据与备份 -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="#FFFFFFFF"
-                app:cardCornerRadius="18dp"
+                app:cardBackgroundColor="@color/bg_card_color"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:strokeColor="#E0E6F0"
+                app:strokeColor="@color/border_color"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -314,7 +453,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="6dp"
                         android:text="数据与备份"
-                        android:textColor="#90A4AE"
+                        android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
                     <LinearLayout
@@ -328,8 +467,8 @@
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/ic_data"
-                            android:tint="@color/main_blue" />
+                            android:src="@drawable/ic_user"
+                            app:tint="@color/main_blue" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -337,14 +476,14 @@
                             android:layout_marginStart="12dp"
                             android:layout_weight="1"
                             android:text="导出数据"
-                            android:textColor="#263238"
+                            android:textColor="@color/text_primary"
                             android:textSize="14sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="CSV / JSON"
-                            android:textColor="#78909C"
+                            android:textColor="@color/text_secondary"
                             android:textSize="13sp" />
                     </LinearLayout>
 
@@ -360,7 +499,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:src="@drawable/ic_percent"
-                            android:tint="@color/main_blue" />
+                            app:tint="@color/main_blue" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -368,30 +507,29 @@
                             android:layout_marginStart="12dp"
                             android:layout_weight="1"
                             android:text="导入 / 恢复"
-                            android:textColor="#263238"
+                            android:textColor="@color/text_primary"
                             android:textSize="14sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="从备份文件"
-                            android:textColor="#78909C"
+                            android:textColor="@color/text_secondary"
                             android:textSize="13sp" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 关于与反馈 -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardAbout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="#FFFFFFFF"
-                app:cardCornerRadius="18dp"
+                app:cardBackgroundColor="@color/bg_card_color"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:strokeColor="#E0E6F0"
+                app:strokeColor="@color/border_color"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -406,7 +544,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="6dp"
                         android:text="关于与反馈"
-                        android:textColor="#90A4AE"
+                        android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
                     <LinearLayout
@@ -420,8 +558,8 @@
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/ic_app_icon"
-                            android:tint="@color/main_blue" />
+                            android:src="@drawable/ic_user"
+                            app:tint="@color/main_blue" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -429,7 +567,7 @@
                             android:layout_marginStart="12dp"
                             android:layout_weight="1"
                             android:text="当前版本"
-                            android:textColor="#263238"
+                            android:textColor="@color/text_primary"
                             android:textSize="14sp" />
 
                         <TextView
@@ -437,7 +575,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="v1.0.0"
-                            android:textColor="#78909C"
+                            android:textColor="@color/text_secondary"
                             android:textSize="13sp" />
                     </LinearLayout>
 
@@ -453,7 +591,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:src="@drawable/ic_user"
-                            android:tint="@color/main_blue" />
+                            app:tint="@color/main_blue" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -461,20 +599,20 @@
                             android:layout_marginStart="12dp"
                             android:layout_weight="1"
                             android:text="意见与反馈"
-                            android:textColor="#263238"
+                            android:textColor="@color/text_primary"
                             android:textSize="14sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="欢迎联系作者"
-                            android:textColor="#78909C"
+                            android:textColor="@color/text_secondary"
                             android:textSize="13sp" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

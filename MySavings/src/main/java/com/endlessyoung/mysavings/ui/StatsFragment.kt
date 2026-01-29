@@ -209,11 +209,11 @@ class StatsFragment : Fragment() {
             selectionShift = 8f
             yValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
             xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
-            valueLineColor = Color.parseColor(AppColors.TEXT_MAIN)
+            valueLineColor = AppColors.TEXT_PRIMARY.toColorInt()
             valueLinePart1OffsetPercentage = 85f
             valueLinePart1Length = 0.6f
             valueLinePart2Length = 0.4f
-            valueTextColor = Color.parseColor(AppColors.TEXT_MAIN)
+            valueTextColor = AppColors.TEXT_PRIMARY.toColorInt()
         }
 
         binding.pieChart.apply {
@@ -225,7 +225,7 @@ class StatsFragment : Fragment() {
                     }
                 })
                 setValueTextSize(11f)
-                setValueTextColor(Color.parseColor(AppColors.TEXT_MAIN))
+                setValueTextColor(AppColors.TEXT_PRIMARY.toColorInt())
             }
 
             setUsePercentValues(true)
@@ -234,8 +234,8 @@ class StatsFragment : Fragment() {
             transparentCircleRadius = 60f
             centerText = "资产分布"
             setCenterTextSize(14f)
-            setCenterTextColor(Color.parseColor(AppColors.TEXT_MAIN))
-            setEntryLabelColor(Color.parseColor(AppColors.TEXT_MAIN))
+            setCenterTextColor(Color.parseColor(AppColors.TEXT_PRIMARY))
+            setEntryLabelColor(AppColors.TEXT_PRIMARY.toColorInt())
             setEntryLabelTextSize(11f)
 
             legend.apply {
@@ -243,7 +243,7 @@ class StatsFragment : Fragment() {
                 horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
                 orientation = Legend.LegendOrientation.HORIZONTAL
                 setDrawInside(false)
-                textColor = Color.parseColor(AppColors.TEXT_MAIN)
+                textColor = AppColors.TEXT_PRIMARY.toColorInt()
                 yOffset = 20f
                 isWordWrapEnabled = true
             }
@@ -266,7 +266,7 @@ class StatsFragment : Fragment() {
 
         val dataSet = BarDataSet(entries, if (isYearly) "年度存款 单位（万）" else "月度存款 单位（万）").apply {
             color = AppColors.PRIMARY_BLUE.toColorInt()
-            valueTextColor = AppColors.TEXT_MAIN.toColorInt()
+            valueTextColor = AppColors.TEXT_PRIMARY.toColorInt()
             valueTextSize = 10f
             valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {

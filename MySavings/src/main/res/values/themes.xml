@@ -1,56 +1,74 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.MySavings" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-<!--        <item name="android:statusBarColor">@color/main_blue</item>-->
+        <item name="colorPrimary">@color/main_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/main_blue_light</item>
+        <item name="colorOnPrimaryContainer">@color/main_blue_dark</item>
+        <item name="colorSecondary">@color/main_blue</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSurface">@color/bg_card_color</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorSurfaceVariant">@color/bg_surface_color</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 
     <style name="Theme.MySavings" parent="Base.Theme.MySavings" />
 
-<!--    <style name="MyAlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">-->
-<!--        <item name="colorSurface">@color/main_blue</item>-->
-<!--        <item name="android:textColorPrimary">@color/main_blue</item>-->
-<!--        <item name="android:textColorSecondary">@color/main_blue</item>-->
-<!--        <item name="colorPrimary">@color/main_blue</item>-->
-<!--    </style>-->
+    <style name="Widget.MySavings" parent="android:Widget" />
+    <style name="Widget.MySavings.Card" parent="Widget.Material3.CardView.Elevated" />
+    <style name="Widget.MySavings.Button" parent="Widget.Material3.Button" />
+    <style name="TextAppearance.MySavings" parent="TextAppearance.Material3.BodyMedium" />
 
-    <style name="StatsCard">
-        <item name="cardBackgroundColor">#FFFFFF</item>
-        <item name="cardCornerRadius">12dp</item>
-        <item name="cardElevation">0dp</item>
+    <style name="Widget.MySavings.Card.Elevated">
+        <item name="cardBackgroundColor">@color/bg_card_color</item>
+        <item name="cardCornerRadius">14dp</item>
+        <item name="cardElevation">1dp</item>
+        <item name="strokeColor">@color/divider_color</item>
+        <item name="strokeWidth">0.5dp</item>
+    </style>
+
+    <style name="Widget.MySavings.Card.Outlined">
+        <item name="cardBackgroundColor">@color/bg_card_color</item>
+        <item name="cardCornerRadius">14dp</item>
+        <item name="cardElevation">1dp</item>
+        <item name="strokeColor">@color/divider_color</item>
+        <item name="strokeWidth">0.5dp</item>
+    </style>
+
+    <style name="Widget.MySavings.Card.Primary">
+        <item name="cardBackgroundColor">@color/main_blue</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">4dp</item>
         <item name="strokeWidth">0dp</item>
-        <item name="android:layout_marginBottom">8dp</item>
     </style>
 
-    <style name="StatsDivider">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
-        <item name="android:background">#DDDDDD</item>
-        <item name="android:layout_marginVertical">12dp</item>
+    <style name="Widget.MySavings.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/main_blue</item>
     </style>
 
-    <style name="StatsTitle">
+    <style name="Widget.MySavings.Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/main_blue</item>
+    </style>
+
+    <style name="Widget.MySavings.ExtendedFAB" parent="Widget.Material3.ExtendedFloatingActionButton.Primary">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">#333333</item>
-        <item name="android:layout_marginStart">8dp</item>
-        <item name="android:layout_marginBottom">6dp</item>
-    </style>
-
-    <style name="MyAlertDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
-        <item name="colorPrimary">@color/main_blue</item>
-        <item name="colorSecondary">@color/main_blue_dark</item>
-        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.App.LargeComponent</item>
+        <item name="backgroundTint">@color/main_blue</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="CustomDatePickerTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
         <item name="colorPrimary">@color/main_blue</item>
         <item name="colorSecondary">@color/main_blue</item>
         <item name="colorOnPrimary">#FFFFFF</item>
-    </style>
-
-    <style name="ShapeAppearance.App.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
-        <item name="cornerSize">16dp</item>
     </style>
 
     <style name="Widget.MaterialComponents.Button.OutlinedButton.ExtraSmall" parent="Widget.MaterialComponents.Button.OutlinedButton">
@@ -61,16 +79,80 @@
         <item name="android:minHeight">32dp</item>
         <item name="android:minWidth">48dp</item>
         <item name="android:textSize">12sp</item>
-        <item name="cornerRadius">4dp</item>
-        <item name="strokeColor">#1677FF</item>
+        <item name="cornerRadius">6dp</item>
+        <item name="strokeColor">@color/main_blue</item>
+    </style>
+
+    <style name="TextAppearance.MySavings.Headline">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextAppearance.MySavings.Title">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.MySavings.Body">
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.MySavings.Caption">
+        <item name="android:textColor">@color/text_tertiary</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="MyAlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/main_blue</item>
+        <item name="colorAccent">@color/main_blue</item>
+    </style>
+
+    <style name="Widget.MySavings.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="titleTextAppearance">@style/TextAppearance.MySavings.Title</item>
+        <item name="android:background">@color/main_blue</item>
+        <item name="android:elevation">0dp</item>
+    </style>
+
+    <style name="StatsCard">
+        <item name="cardBackgroundColor">@color/bg_card_color</item>
+        <item name="cardCornerRadius">14dp</item>
+        <item name="cardElevation">1dp</item>
+        <item name="strokeColor">@color/divider_color</item>
+        <item name="strokeWidth">0.5dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <style name="StatsDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">@color/divider_color</item>
+        <item name="android:layout_marginVertical">12dp</item>
+    </style>
+
+    <style name="StatsTitle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
     </style>
 
     <style name="BottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
+        <item name="bottomSheetStyle">@style/Widget.MySavings.BottomSheet</item>
     </style>
 
-    <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@android:color/transparent</item>
+    <style name="Widget.MySavings.BottomSheet" parent="Widget.Material3.BottomSheet">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.MySavings.BottomSheet</item>
+        <item name="backgroundTint">@color/bg_card_color</item>
     </style>
 
+    <style name="ShapeAppearance.MySavings.BottomSheet" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">24dp</item>
+        <item name="cornerSizeTopRight">24dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
 </resources>

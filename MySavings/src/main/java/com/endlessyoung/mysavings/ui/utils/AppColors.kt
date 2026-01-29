@@ -4,19 +4,33 @@ import android.graphics.Color
 import androidx.core.graphics.toColorInt
 
 object AppColors {
-    const val PRIMARY_BLUE = "#1677FF"
-    const val PRIMARY_DARK = "#1976D2"
+    // 主题色 - 现代简洁蓝
+    const val PRIMARY_BLUE = "#0066FF"
+    const val PRIMARY_DARK = "#003D99"
+    const val PRIMARY_LIGHT = "#F0F5FF"
 
-    const val SUCCESS_GREEN = "#66BB6A"
-    const val WARNING_ORANGE = "#FFA726"
-    const val ERROR_RED = "#EF5350"
-    const val INFO_CYAN = "#26C6DA"
-    const val PURPLE_ACCENT = "#AB47BC"
+    // 功能色 - 现代化调色板
+    const val SUCCESS_GREEN = "#10B981"
+    const val WARNING_ORANGE = "#F59E0B"
+    const val ERROR_RED = "#EF4444"
+    const val INFO_CYAN = "#06B6D4"
+    const val PURPLE_ACCENT = "#8B5CF6"
+    const val PINK_ACCENT = "#EC4899"
 
-    const val BACKGROUND_LIGHT = "#F8F9FA"
-    const val TEXT_MAIN = "#263238"
-    const val TEXT_SECONDARY = "#90A4AE"
-    const val DIVIDER_GRAY = "#EEEEEE"
+    // 背景和表面色
+    const val BACKGROUND_WHITE = "#FFFFFF"
+    const val BACKGROUND_LIGHT = "#F9FAFB"
+    const val BACKGROUND_SECONDARY = "#F3F4F6"
+    
+    // 文本色 - 清晰的层级
+    const val TEXT_PRIMARY = "#1F2937"
+    const val TEXT_SECONDARY = "#6B7280"
+    const val TEXT_TERTIARY = "#9CA3AF"
+    const val TEXT_HINT = "#D1D5DB"
+    
+    // 分割线和边框
+    const val DIVIDER_GRAY = "#E5E7EB"
+    const val BORDER_GRAY = "#D1D5DB"
 
     fun getChartColorPalette(): List<Int> {
         return listOf(
@@ -25,7 +39,8 @@ object AppColors {
             WARNING_ORANGE.toColorInt(),
             ERROR_RED.toColorInt(),
             PURPLE_ACCENT.toColorInt(),
-            INFO_CYAN.toColorInt()
+            INFO_CYAN.toColorInt(),
+            PINK_ACCENT.toColorInt()
         )
     }
 }

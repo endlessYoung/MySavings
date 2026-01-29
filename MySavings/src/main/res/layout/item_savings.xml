@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="8dp"
+    android:layout_marginHorizontal="0dp"
     android:layout_marginVertical="6dp"
-    app:cardBackgroundColor="#FFFFFF"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="2dp"
-    app:strokeColor="#E3E8F0"
-    app:strokeWidth="1dp">
+    app:cardBackgroundColor="@color/bg_card_color"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="1dp"
+    app:strokeColor="@color/divider_color"
+    app:strokeWidth="0.5dp">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="12dp">
+                android:padding="14dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -38,8 +38,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="#263238"
-                        android:textSize="14sp"
+                        android:textColor="@color/text_primary"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         tools:text="招商银行" />
 
@@ -53,12 +53,12 @@
                             android:id="@+id/tvRemainingDays"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="4dp"
-                            android:background="#FFF3E0"
-                            android:paddingHorizontal="4dp"
-                            android:paddingVertical="1dp"
-                            android:textColor="#E65100"
-                            android:textSize="9sp"
+                            android:layout_marginEnd="6dp"
+                            android:background="@drawable/bg_warning_badge"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="3dp"
+                            android:textColor="@color/warning_color"
+                            android:textSize="10sp"
                             android:textStyle="bold"
                             tools:text="剩125天" />
 
@@ -66,10 +66,10 @@
                             android:id="@+id/tvDays"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="#E8F5E9"
-                            android:paddingHorizontal="6dp"
-                            android:paddingVertical="1dp"
-                            android:textColor="#4CAF50"
+                            android:background="@drawable/bg_success_badge"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="3dp"
+                            android:textColor="@color/success_color"
                             android:textSize="10sp"
                             tools:text="3年期" />
                     </LinearLayout>
@@ -79,33 +79,34 @@
                     android:id="@+id/tvAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textColor="#1F3A5F"
-                    android:textSize="20sp"
+                    android:layout_marginTop="6dp"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/main_blue"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     tools:text="¥ 100,000.00" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="6dp"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/tvRate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#607D8B"
-                        android:textSize="12sp"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="13sp"
                         tools:text="利率 3.5%" />
 
                     <TextView
                         android:id="@+id/tvEndTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:textColor="#9E9E9E"
-                        android:textSize="12sp"
+                        android:layout_marginStart="16dp"
+                        android:textColor="@color/text_tertiary"
+                        android:textSize="13sp"
                         tools:text="到期 2027-01-01" />
                 </LinearLayout>
             </LinearLayout>
@@ -113,16 +114,16 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginHorizontal="12dp"
-                android:background="#EEEEEE" />
+                android:layout_marginHorizontal="14dp"
+                android:background="@color/divider_color" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#F9FAFB"
+                android:background="@color/neutral_100"
                 android:orientation="horizontal"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="8dp">
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="10dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -134,15 +135,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="预计利息"
-                        android:textColor="#78909C"
-                        android:textSize="10sp" />
+                        android:textColor="@color/text_tertiary"
+                        android:textSize="11sp" />
 
                     <TextView
                         android:id="@+id/tvInterest"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#F57C00"
-                        android:textSize="13sp"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/success_color"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         tools:text="+ ¥ 10,500.00" />
                 </LinearLayout>
@@ -157,15 +159,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="本息合计"
-                        android:textColor="#78909C"
-                        android:textSize="10sp" />
+                        android:textColor="@color/text_tertiary"
+                        android:textSize="11sp" />
 
                     <TextView
                         android:id="@+id/tvTotalAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#263238"
-                        android:textSize="13sp"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         tools:text="¥ 110,500.00" />
                 </LinearLayout>
@@ -174,12 +177,12 @@
 
         <View
             android:id="@+id/viewBankColorTag"
-            android:layout_width="3dp"
+            android:layout_width="4dp"
             android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            android:background="#E0E0E0" />
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/main_blue" />
 
     </FrameLayout>
 

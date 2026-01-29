@@ -1,4 +1,36 @@
 <resources>
+    <!-- 外边距 -->
+    <dimen name="margin_extra_small">4dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">12dp</dimen>
+    <dimen name="margin_large">16dp</dimen>
+    <dimen name="margin_extra_large">20dp</dimen>
+    <dimen name="margin_xxl">24dp</dimen>
+    
+    <!-- 内边距 -->
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">12dp</dimen>
+    <dimen name="padding_large">16dp</dimen>
+    <dimen name="padding_extra_large">20dp</dimen>
+    
+    <!-- 圆角 -->
+    <dimen name="corner_radius_small">8dp</dimen>
+    <dimen name="corner_radius_medium">12dp</dimen>
+    <dimen name="corner_radius_large">14dp</dimen>
+    <dimen name="corner_radius_xlarge">16dp</dimen>
+    
+    <!-- 高度 -->
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="status_bar_height_approx">24dp</dimen>
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="bottom_nav_height">64dp</dimen>
+    
+    <!-- 分割线 -->
+    <dimen name="divider_height_thin">0.5dp</dimen>
+    <dimen name="divider_height_normal">1dp</dimen>
+    
+    <!-- 阴影 -->
+    <dimen name="elevation_small">1dp</dimen>
+    <dimen name="elevation_medium">2dp</dimen>
+    <dimen name="elevation_large">4dp</dimen>
 </resources>
