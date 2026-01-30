@@ -11,6 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
+        android:clipToPadding="false"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,141 +22,146 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingTop="12dp"
-            android:paddingBottom="24dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/gradient_user_profile"
-                android:orientation="vertical"
-                android:padding="16dp">
+            android:paddingBottom="80dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:src="@drawable/ic_user"
-                        android:background="@drawable/bg_circle_white"
-                        android:padding="16dp"
-                        app:tint="@color/main_blue" />
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/gradient_user_profile"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="16dp"
-                        android:orientation="vertical">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="用户名"
-                            android:textColor="@color/text_primary"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:src="@drawable/ic_user"
+                            android:background="@drawable/bg_circle_white"
+                            android:padding="16dp"
+                            app:tint="@color/main_blue" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="我的储蓄账本"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp" />
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="用户名"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="我的储蓄账本"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
+                                android:alpha="0.9" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_qr_code"
+                            app:tint="@color/white"
+                            android:alpha="0.9" />
                     </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_qr_code"
-                        app:tint="@color/text_secondary" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvTotalRecords"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="记录总数"
+                                android:textColor="@color/white"
+                                android:textSize="12sp"
+                                android:alpha="0.8" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvTotalPlans"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="计划数量"
+                                android:textColor="@color/white"
+                                android:textSize="12sp"
+                                android:alpha="0.8" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvDaysUsed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="使用天数"
+                                android:textColor="@color/white"
+                                android:textSize="12sp"
+                                android:alpha="0.8" />
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvTotalRecords"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@color/main_blue"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="记录总数"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvTotalPlans"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@color/main_blue"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="计划数量"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvDaysUsed"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@color/main_blue"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="使用天数"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardReminders"
@@ -183,17 +189,18 @@
 
                         <View
                             android:layout_width="4dp"
-                            android:layout_height="18dp"
-                            android:background="@color/main_blue" />
+                            android:layout_height="16dp"
+                            android:background="@drawable/shape_pill_blue"
+                            android:backgroundTint="@color/main_blue" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:layout_marginStart="12dp"
+                            android:layout_marginStart="10dp"
                             android:text="支出计划提醒"
                             android:textColor="@color/text_primary"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -232,17 +239,17 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="8dp">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="8dp"
                         android:text="外观与主题"
                         android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:id="@+id/rowThemeMode"
@@ -254,15 +261,15 @@
                         android:background="?attr/selectableItemBackground">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_user"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_palette"
                             app:tint="@color/main_blue" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
+                            android:layout_marginStart="16dp"
                             android:layout_weight="1"
                             android:text="主题模式"
                             android:textColor="@color/text_primary"
@@ -295,16 +302,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:paddingVertical="8dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="8dp"
                         android:text="偏好设置"
                         android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:id="@+id/rowDefaultSort"
@@ -316,15 +324,15 @@
                         android:background="?attr/selectableItemBackground">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_user"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_sort_xml"
                             app:tint="@color/main_blue" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
+                            android:layout_marginStart="16dp"
                             android:layout_weight="1"
                             android:text="默认排序方式"
                             android:textColor="@color/text_primary"
@@ -334,6 +342,7 @@
                             android:id="@+id/tvDefaultSortSummary"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
                             android:text="按时间"
                             android:textColor="@color/text_secondary"
                             android:textSize="13sp" />
@@ -349,21 +358,21 @@
                         android:background="?attr/selectableItemBackground">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_user"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_visibility_off"
                             app:tint="@color/main_blue" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
+                            android:layout_marginStart="16dp"
                             android:layout_weight="1"
                             android:text="启动时隐藏资产金额"
                             android:textColor="@color/text_primary"
                             android:textSize="14sp" />
 
-                        <androidx.appcompat.widget.SwitchCompat
+                        <com.google.android.material.materialswitch.MaterialSwitch
                             android:id="@+id/switchHideAmountOnStart"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -393,10 +402,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="8dp"
                         android:text="隐私与安全"
                         android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:id="@+id/rowAppLock"
@@ -407,21 +417,21 @@
                         android:paddingHorizontal="16dp">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_user"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_lock"
                             app:tint="@color/main_blue" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
+                            android:layout_marginStart="16dp"
                             android:layout_weight="1"
                             android:text="应用锁（指纹 / PIN）"
                             android:textColor="@color/text_primary"
                             android:textSize="14sp" />
 
-                        <androidx.appcompat.widget.SwitchCompat
+                        <com.google.android.material.materialswitch.MaterialSwitch
                             android:id="@+id/switchAppLock"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -451,10 +461,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="8dp"
                         android:text="数据与备份"
                         android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:id="@+id/rowExportData"
@@ -465,15 +476,15 @@
                         android:paddingHorizontal="16dp">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_user"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_file_upload"
                             app:tint="@color/main_blue" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
+                            android:layout_marginStart="16dp"
                             android:layout_weight="1"
                             android:text="导出数据"
                             android:textColor="@color/text_primary"
@@ -496,15 +507,15 @@
                         android:paddingHorizontal="16dp">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_percent"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_file_download"
                             app:tint="@color/main_blue" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
+                            android:layout_marginStart="16dp"
                             android:layout_weight="1"
                             android:text="导入 / 恢复"
                             android:textColor="@color/text_primary"
@@ -513,6 +524,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
                             android:text="从备份文件"
                             android:textColor="@color/text_secondary"
                             android:textSize="13sp" />
@@ -542,10 +554,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="8dp"
                         android:text="关于与反馈"
                         android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:id="@+id/rowVersion"
@@ -556,15 +569,15 @@
                         android:paddingHorizontal="16dp">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_user"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_info"
                             app:tint="@color/main_blue" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
+                            android:layout_marginStart="16dp"
                             android:layout_weight="1"
                             android:text="当前版本"
                             android:textColor="@color/text_primary"
@@ -588,15 +601,15 @@
                         android:paddingHorizontal="16dp">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_user"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_feedback"
                             app:tint="@color/main_blue" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
+                            android:layout_marginStart="16dp"
                             android:layout_weight="1"
                             android:text="意见与反馈"
                             android:textColor="@color/text_primary"
@@ -605,6 +618,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
                             android:text="欢迎联系作者"
                             android:textColor="@color/text_secondary"
                             android:textSize="13sp" />

@@ -74,8 +74,8 @@
 
                     <Spinner
                         android:id="@+id/spSort"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_marginStart="8dp"
                         android:spinnerMode="dropdown"
                         android:background="@drawable/ic_arrow_drop_down"
@@ -106,7 +106,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/bottom_nav_height"
         android:layout_gravity="bottom"
         app:menu="@menu/menu_bottom_nav"
         app:labelVisibilityMode="labeled"

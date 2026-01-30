@@ -17,10 +17,10 @@
     <color name="bg_overlay_color">#CC000000</color>
     
     <!-- 文本色 - 更清晰的层级 -->
-    <color name="text_primary">#1F2937</color>
-    <color name="text_secondary">#6B7280</color>
-    <color name="text_tertiary">#9CA3AF</color>
-    <color name="text_hint">#D1D5DB</color>
+    <color name="text_primary">#333333</color>
+    <color name="text_secondary">#666666</color>
+    <color name="text_tertiary">#999999</color>
+    <color name="text_hint">#CCCCCC</color>
     
     <!-- 功能色 - 现代化 -->
     <color name="success_color">#10B981</color>

@@ -33,6 +33,7 @@ import com.endlessyoung.mysavings.R
 import com.endlessyoung.mysavings.databinding.DialogActionMenuBinding
 import com.endlessyoung.mysavings.databinding.FragmentHomeBinding
 import com.endlessyoung.mysavings.log.MySavingsLog
+import com.endlessyoung.mysavings.ui.utils.SettingsManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -48,13 +49,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var adapter: SavingAdapter
 
-    private var isAmountVisible = false
+    private var isAmountVisible = true
 
     private var isPlanExpanded = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHomeBinding.bind(view)
+        
+        // Load initial visibility preference
+        val hideOnStart = SettingsManager.isAmountHiddenOnStart(requireContext())
+        isAmountVisible = !hideOnStart
 
         setupRecyclerView()
         setupListeners()
@@ -178,6 +183,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     sharedVm.filteredSavings.collect { list ->
                         MySavingsLog.d("HomeFragment", "更新列表数据，条数: ${list.size}")
                         adapter.submitList(list)
+                        // 更新资产明细的统计数量
+                        binding.tvItemCount.text = "共${list.size}项"
                     }
                 }
 
@@ -201,6 +208,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 val total = plans?.sumOf { it.amount }
                 binding.tvPlanSummary.text =
                     "本月计划支出: ${MoneyUtils.formatWithSymbol(total)} (${plans?.size}笔)"
+                // 更新计划数量角标
+                val count = plans?.size ?: 0
+                binding.tvPlanCount.text = "${count}项"
+                
                 planAdapter.submitList(plans)
 
                 // 无数据自动隐藏整个卡片
@@ -264,12 +275,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             binding.tvNetWorthAmount.text = MoneyUtils.formatWithSymbol(total)
             binding.tvBankTotal.text = "存款: ${MoneyUtils.formatWithSymbol(saving)}"
             binding.tvFundTotal.text = "公积金: ${MoneyUtils.formatWithSymbol(fund)}"
-            binding.ivToggleVisible.setImageResource(R.drawable.ic_show)
+            binding.ivToggleVisible.setImageResource(R.drawable.ic_visibility)
         } else {
             binding.tvNetWorthAmount.text = "****"
             binding.tvBankTotal.text = "存款: ****"
             binding.tvFundTotal.text = "公积金: ****"
-            binding.ivToggleVisible.setImageResource(R.drawable.ic_hide)
+            binding.ivToggleVisible.setImageResource(R.drawable.ic_visibility_off)
         }
     }
 

@@ -30,6 +30,8 @@ import com.google.android.material.appbar.AppBarLayout
 import java.math.BigDecimal
 import kotlin.getValue
 
+import com.endlessyoung.mysavings.ui.utils.SettingsManager
+
 class MainActivity : AppCompatActivity() {
 
     companion object {
@@ -45,6 +47,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Apply Theme
+        SettingsManager.initTheme(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

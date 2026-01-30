@@ -137,6 +137,33 @@ class SavingViewModel(app: Application) : AndroidViewModel(app) {
         _sortMode.value = mode
     }
 
+    // 预测未来一年的资金到期情况
+    val futureMaturity: Flow<Map<String, BigDecimal>> = savingRepo.allSavings.map { list ->
+        val calendar = Calendar.getInstance()
+        val now = System.currentTimeMillis()
+        val oneYearLater = Calendar.getInstance().apply { add(Calendar.YEAR, 1) }.timeInMillis
+
+        // 初始化未来12个月的空数据
+        val result = mutableMapOf<String, BigDecimal>()
+        val tempCal = Calendar.getInstance()
+        for (i in 0 until 12) {
+            val key = "${tempCal.get(Calendar.YEAR)}-${tempCal.get(Calendar.MONTH) + 1}"
+            result[key] = BigDecimal.ZERO
+            tempCal.add(Calendar.MONTH, 1)
+        }
+
+        // 填充实际数据
+        list.filter { it.endTime in now..oneYearLater }
+            .forEach { item ->
+                calendar.timeInMillis = item.endTime
+                val key = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}"
+                val currentTotal = result[key] ?: BigDecimal.ZERO
+                // 到期本息 = 本金 + 利息
+                result[key] = currentTotal.add(item.amount).add(item.interest)
+            }
+        result
+    }
+
     val monthlySavingsByYear: Flow<Map<Int, BigDecimal>> =
         combine(savingRepo.allSavings, _filterYear) { list, year ->
             val fullYearMap = (1..12).associateWith { BigDecimal.ZERO }.toMutableMap()

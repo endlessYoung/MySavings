@@ -67,10 +67,17 @@ class StatsFragment : Fragment() {
 
         // 默认加载年度存款统计
         observeYearlyData()
+
+        // 观察资金到期预测数据
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedVm.futureMaturity.collect { data ->
+                updateLineChart(data)
+            }
+        }
     }
 
     private fun initChartStyles() {
-        listOf(binding.pieChart, binding.barChart).forEach {
+        listOf(binding.pieChart, binding.barChart, binding.lineChart).forEach {
             it.description.isEnabled = false
             it.setNoDataText("暂无数据，快去记一笔吧")
             it.setNoDataTextColor(AppColors.TEXT_SECONDARY.toColorInt())
@@ -295,6 +302,63 @@ class StatsFragment : Fragment() {
                 }
             }
 
+            invalidate()
+        }
+    }
+
+    private fun updateLineChart(data: Map<String, BigDecimal>) {
+        if (data.values.all { it == BigDecimal.ZERO }) {
+            binding.lineChart.data = null
+            binding.lineChart.invalidate()
+            return
+        }
+
+        val entries = data.entries.mapIndexed { index, entry ->
+            Entry(index.toFloat(), entry.value.toFloat(), entry.key)
+        }
+
+        val dataSet = LineDataSet(entries, "到期本息 (元)").apply {
+            color = AppColors.WARNING_ORANGE.toColorInt()
+            setCircleColor(AppColors.WARNING_ORANGE.toColorInt())
+            lineWidth = 2f
+            circleRadius = 4f
+            setDrawCircleHole(false)
+            valueTextSize = 10f
+            valueTextColor = AppColors.TEXT_PRIMARY.toColorInt()
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+            setDrawFilled(true)
+            fillColor = AppColors.WARNING_ORANGE.toColorInt()
+            fillAlpha = 50
+            valueFormatter = object : ValueFormatter() {
+                override fun getFormattedValue(value: Float): String {
+                    return if (value > 0) MoneyUtils.formatWithNumber(BigDecimal(value.toDouble())) else ""
+                }
+            }
+        }
+
+        binding.lineChart.apply {
+            this.data = LineData(dataSet)
+            
+            xAxis.apply {
+                position = XAxis.XAxisPosition.BOTTOM
+                setDrawGridLines(false)
+                textColor = AppColors.TEXT_SECONDARY.toColorInt()
+                granularity = 1f
+                labelRotationAngle = -45f
+                valueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        val index = value.toInt()
+                        if (index < 0 || index >= entries.size) return ""
+                        return entries[index].data.toString()
+                    }
+                }
+            }
+
+            axisLeft.textColor = AppColors.TEXT_SECONDARY.toColorInt()
+            axisRight.isEnabled = false
+            
+            legend.isEnabled = false
+            animateX(1000)
             invalidate()
         }
     }

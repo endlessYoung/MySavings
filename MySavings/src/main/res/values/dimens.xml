@@ -23,7 +23,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="status_bar_height_approx">24dp</dimen>
     <dimen name="toolbar_height">56dp</dimen>
-    <dimen name="bottom_nav_height">64dp</dimen>
+    <dimen name="bottom_nav_height">70dp</dimen>
     
     <!-- 分割线 -->
     <dimen name="divider_height_thin">0.5dp</dimen>
