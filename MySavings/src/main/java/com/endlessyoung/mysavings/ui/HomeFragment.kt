@@ -277,9 +277,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             binding.tvFundTotal.text = "公积金: ${MoneyUtils.formatWithSymbol(fund)}"
             binding.ivToggleVisible.setImageResource(R.drawable.ic_visibility)
         } else {
-            binding.tvNetWorthAmount.text = "****"
-            binding.tvBankTotal.text = "存款: ****"
-            binding.tvFundTotal.text = "公积金: ****"
+            binding.tvNetWorthAmount.text = "******"
+            binding.tvBankTotal.text = "存款: ******"
+            binding.tvFundTotal.text = "公积金: ******"
             binding.ivToggleVisible.setImageResource(R.drawable.ic_visibility_off)
         }
     }
@@ -287,6 +287,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun toggleAmountVisibility() {
         isAmountVisible = !isAmountVisible
+        
+        // 更新适配器中的隐私模式状态
+        adapter.isPrivacyMode = !isAmountVisible
+        adapter.notifyDataSetChanged()
+        
+        val planAdapter = binding.rvExpandedPlans.adapter as? ExpandedPlanAdapter
+        planAdapter?.let {
+            it.isPrivacyMode = !isAmountVisible
+            it.notifyDataSetChanged()
+        }
 
         binding.allPropertiesCard.animate()
             .alpha(0.6f)

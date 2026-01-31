@@ -45,6 +45,7 @@ dependencies {
     // Kotlin + AndroidX 基础库
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.biometric)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
 

@@ -15,6 +15,8 @@ import androidx.core.graphics.toColorInt
 class ExpandedPlanAdapter(private val onSyncClick: (PlanEntity) -> Unit) :
     ListAdapter<PlanEntity, ExpandedPlanAdapter.PlanViewHolder>(PlanDiffCallback()) {
 
+    var isPrivacyMode: Boolean = false
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanViewHolder {
         val binding = ItemPlanExpandedBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
@@ -23,15 +25,20 @@ class ExpandedPlanAdapter(private val onSyncClick: (PlanEntity) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: PlanViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), isPrivacyMode)
     }
 
     inner class PlanViewHolder(private val binding: ItemPlanExpandedBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(plan: PlanEntity) {
+        fun bind(plan: PlanEntity, isPrivacyMode: Boolean) {
             binding.tvPlanTitle.text = plan.title
-            binding.tvPlanAmount.text = MoneyUtils.formatWithSymbol(plan.amount)
+            
+            if (isPrivacyMode) {
+                binding.tvPlanAmount.text = "******"
+            } else {
+                binding.tvPlanAmount.text = MoneyUtils.formatWithSymbol(plan.amount)
+            }
 
             val diff = plan.planDate - System.currentTimeMillis()
             val days = (diff / (1000 * 60 * 60 * 24)).toInt()

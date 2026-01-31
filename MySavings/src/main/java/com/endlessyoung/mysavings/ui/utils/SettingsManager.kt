@@ -3,6 +3,7 @@ package com.endlessyoung.mysavings.ui.utils
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
 
 object SettingsManager {
     private const val PREF_NAME = "mysavings_prefs"
@@ -25,7 +26,7 @@ object SettingsManager {
     }
 
     fun setThemeMode(context: Context, mode: Int) {
-        getPrefs(context).edit().putInt(KEY_THEME_MODE, mode).apply()
+        getPrefs(context).edit { putInt(KEY_THEME_MODE, mode) }
         AppCompatDelegate.setDefaultNightMode(mode)
     }
 
@@ -43,7 +44,7 @@ object SettingsManager {
     }
 
     fun setAmountHiddenOnStart(context: Context, hidden: Boolean) {
-        getPrefs(context).edit().putBoolean(KEY_HIDE_AMOUNT, hidden).apply()
+        getPrefs(context).edit { putBoolean(KEY_HIDE_AMOUNT, hidden) }
     }
 
     // App Lock
@@ -52,7 +53,7 @@ object SettingsManager {
     }
 
     fun setAppLockEnabled(context: Context, enabled: Boolean) {
-        getPrefs(context).edit().putBoolean(KEY_APP_LOCK, enabled).apply()
+        getPrefs(context).edit { putBoolean(KEY_APP_LOCK, enabled) }
     }
 
     // Default Sort
@@ -61,7 +62,7 @@ object SettingsManager {
     }
 
     fun setDefaultSort(context: Context, sortMode: Int) {
-        getPrefs(context).edit().putInt(KEY_DEFAULT_SORT, sortMode).apply()
+        getPrefs(context).edit { putInt(KEY_DEFAULT_SORT, sortMode) }
     }
 
     fun getDefaultSortLabel(context: Context): String {

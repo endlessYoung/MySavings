@@ -38,7 +38,7 @@
         android:fontFamily="sans-serif-medium"
         android:text="¥ 3,000.00"
         android:textColor="@color/text_secondary"
-        android:textSize="14sp"
+        android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tvPlanDays"
         app:layout_constraintTop_toTopOf="parent" />

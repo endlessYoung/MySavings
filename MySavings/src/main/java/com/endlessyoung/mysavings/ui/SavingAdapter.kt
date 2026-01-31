@@ -27,6 +27,8 @@ class SavingAdapter(
     private val onClick: ((SavingItem) -> Unit)? = null
 ) : ListAdapter<SavingItem, SavingAdapter.VH>(Diff) {
 
+    var isPrivacyMode: Boolean = false
+
     companion object {
         private const val DAY = 24 * 60 * 60 * 1000L
     }
@@ -46,7 +48,7 @@ class SavingAdapter(
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), isPrivacyMode)
     }
 
     class VH(
@@ -67,7 +69,7 @@ class SavingAdapter(
         private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
         @SuppressLint("SetTextI18n")
-        fun bind(item: SavingItem) {
+        fun bind(item: SavingItem, isPrivacyMode: Boolean) {
             val now = System.currentTimeMillis()
             val remain = (item.endTime - now).coerceAtLeast(0)
             val days = remain / DAY
@@ -76,13 +78,21 @@ class SavingAdapter(
             val bankColor = getBankColor(item.bankName)
 
             tvBank.text = item.bankName
-            tvAmount.text = MoneyUtils.formatWithSymbol(item.amount)
+            
+            if (isPrivacyMode) {
+                tvAmount.text = "******"
+                tvInterest.text = "+ ******"
+                tvTotalAmount.text = "******"
+            } else {
+                tvAmount.text = MoneyUtils.formatWithSymbol(item.amount)
+                tvInterest.text = "+ ${MoneyUtils.formatWithSymbol(item.interest)}"
+                tvTotalAmount.text = MoneyUtils.formatWithSymbol(total)
+            }
+            
             tvRate.text = "利率 ${item.interestRate}%"
             tvEndTime.text = "到期 ${sdf.format(Date(item.endTime))}"
             tvDays.text = "$year 年期"
             tvRemainingDays.text = "剩余 $days 天"
-            tvInterest.text = "+ ${MoneyUtils.formatWithSymbol(item.interest)}"
-            tvTotalAmount.text = MoneyUtils.formatWithSymbol(total)
 
             tvDays.setTextColor(
                 if (days <= 7) Color.RED else "#4CAF50".toColorInt()
