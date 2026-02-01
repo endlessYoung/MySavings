@@ -333,6 +333,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 bottomSheet.dismiss()
                 findNavController().navigate(R.id.action_homeFragment_to_AddPlanDialogFragment)
             }
+            // 导航至：智能录入
+            btnNavSmartImport.setOnClickListener {
+                bottomSheet.dismiss()
+                findNavController().navigate(R.id.action_homeFragment_to_SmartImportDialogFragment)
+            }
         }
         bottomSheet.show()
     }

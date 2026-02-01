@@ -53,7 +53,7 @@
             app:boxCornerRadiusTopStart="12dp"
             app:boxStrokeColor="@color/main_blue"
             app:hintEnabled="false"
-            app:startIconDrawable="@drawable/ic_edit"
+            app:startIconDrawable="@drawable/ic_topic"
             app:startIconTint="@color/main_blue">
 
             <com.google.android.material.textfield.TextInputEditText

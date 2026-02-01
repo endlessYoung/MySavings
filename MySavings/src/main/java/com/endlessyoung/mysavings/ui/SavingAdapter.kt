@@ -129,24 +129,6 @@ class SavingAdapter(
                 else -> "#B0BEC5"
             }
         }
-
-        private fun getBankBg(bankName: String): Drawable? {
-            val resId = when {
-                bankName.contains("招商") ->  R.drawable.bg_xingye
-                bankName.contains("建设") -> R.drawable.bg_xingye
-                bankName.contains("农业") -> R.drawable.bg_xingye
-                bankName.contains("工商") -> R.drawable.bg_xingye
-                bankName.contains("中国银行") -> R.drawable.bg_xingye
-                bankName.contains("交通") -> R.drawable.bg_xingye
-                bankName.contains("邮储") -> R.drawable.bg_xingye
-                bankName.contains("兴业") -> R.drawable.bg_xingye
-                else -> R.drawable.bg_xingye
-            }
-
-            return ContextCompat.getDrawable(itemView.context, resId)?.mutate()?.apply {
-                alpha = 35
-            }
-        }
     }
 }
 

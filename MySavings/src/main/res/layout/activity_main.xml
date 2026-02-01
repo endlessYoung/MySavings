@@ -12,9 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/main_blue"
+        android:fitsSystemWindows="true"
         app:elevation="2dp"
-        app:liftOnScroll="false"
-        android:fitsSystemWindows="true">
+        app:liftOnScroll="false">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
@@ -34,12 +34,12 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
                     android:layout_weight="1"
                     android:text="我的储蓄"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginStart="0dp" />
+                    android:textStyle="bold" />
 
                 <!-- 搜索框 -->
                 <LinearLayout
@@ -57,19 +57,19 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:src="@drawable/ic_search"
-                        app:tint="@color/text_tertiary" />
+                        app:tint="@color/white" />
 
                     <EditText
                         android:id="@+id/etSearch"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_marginStart="8dp"
+                        android:layout_weight="1"
                         android:background="@null"
                         android:hint="搜索..."
                         android:maxLines="1"
                         android:textColor="@color/white"
-                        android:textColorHint="#80FFFFFF"
+                        android:textColorHint="@color/white"
                         android:textSize="14sp" />
 
                     <Spinner
@@ -77,9 +77,9 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="8dp"
-                        android:spinnerMode="dropdown"
                         android:background="@drawable/ic_arrow_drop_down"
-                        android:backgroundTint="@color/white" />
+                        android:backgroundTint="@color/white"
+                        android:spinnerMode="dropdown" />
                 </LinearLayout>
 
                 <!-- 菜单按钮 -->
@@ -87,9 +87,9 @@
                     android:id="@+id/btnMenu"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_menu"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:padding="4dp"
+                    android:src="@drawable/ic_menu"
                     app:tint="@color/white" />
             </LinearLayout>
         </com.google.android.material.appbar.MaterialToolbar>
@@ -108,13 +108,13 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_nav_height"
         android:layout_gravity="bottom"
-        app:menu="@menu/menu_bottom_nav"
-        app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/bottom_nav_selector"
-        app:itemTextColor="@color/bottom_nav_selector"
+        android:elevation="4dp"
         app:itemIconSize="24dp"
+        app:itemIconTint="@color/bottom_nav_selector"
         app:itemRippleColor="@color/main_blue_alpha"
-        android:elevation="4dp" />
+        app:itemTextColor="@color/bottom_nav_selector"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_bottom_nav" />
 
     <!-- Security Overlay -->
     <FrameLayout

@@ -26,6 +26,10 @@
         <action
             android:id="@+id/action_homeFragment_to_SavingDetailFragment"
             app:destination="@id/SavingDetailFragment" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_SmartImportDialogFragment"
+            app:destination="@id/SmartImportDialogFragment" />
     </fragment>
 
     <dialog
@@ -99,5 +103,11 @@
         android:name="com.endlessyoung.mysavings.ui.MineFragment"
         android:label=""
         tools:layout="@layout/fragment_mine" />
+
+    <dialog
+        android:id="@+id/SmartImportDialogFragment"
+        android:name="com.endlessyoung.mysavings.ui.SmartImportDialogFragment"
+        android:label="智能录入"
+        tools:layout="@layout/dialog_smart_import" />
 
 </navigation>

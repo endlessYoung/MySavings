@@ -51,8 +51,8 @@
             android:paddingHorizontal="12dp">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_bank"
                 app:tint="@color/main_blue" />
@@ -215,7 +215,7 @@
                     app:boxCornerRadiusTopStart="12dp"
                     app:boxStrokeColor="@color/main_blue"
                     app:hintEnabled="false"
-                    app:startIconDrawable="@drawable/ic_calendar"
+                    app:startIconDrawable="@drawable/ic_duration"
                     app:startIconTint="@color/main_blue">
 
                     <com.google.android.material.textfield.TextInputEditText

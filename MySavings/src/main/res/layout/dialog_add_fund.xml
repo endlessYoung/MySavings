@@ -85,7 +85,7 @@
             app:boxCornerRadiusTopStart="12dp"
             app:boxStrokeColor="@color/main_blue"
             app:hintEnabled="false"
-            app:startIconDrawable="@drawable/ic_money"
+            app:startIconDrawable="@drawable/ic_fund_account_money"
             app:startIconTint="@color/main_blue">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -117,7 +117,7 @@
             app:boxCornerRadiusTopStart="12dp"
             app:boxStrokeColor="@color/main_blue"
             app:hintEnabled="false"
-            app:startIconDrawable="@drawable/ic_percent"
+            app:startIconDrawable="@drawable/ic_deposit"
             app:startIconTint="@color/main_blue">
 
             <com.google.android.material.textfield.TextInputEditText
